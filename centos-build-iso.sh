@@ -213,60 +213,6 @@ function add_kickstart_script {
 
 	rm -f /etc/ssh/ssh_host*key*
 
-	%end
-	EOF
-}
-
-function add_postinstall2kickstart {
-	# add script to install extras during postinstall
-
-	cat >> $PWD/iso/isolinux/ui/ks.cfg <<-'EOF'
-
-	# mount iso 
-	mount -r -t iso9660 /dev/sr0 /media
-
-	# install updates
-	if [ -d /media/updates ]; then 
-		echo - Installing OS updates
-		rpm  -Uvh /media/updates/*.rpm
-	fi
-
-
-	# install extra's from iso
-	for i in /media/deps/* /media/extras/*; do
-		if [ -d $i ]; then 
-
-			# packages in subdirectories are considered requirements for main package
-			for j in $i/*; do
-				if [ -d $j ]; then
-					rpm -Uvh --replacepkgs $j/*.rpm
-				fi
-			done
-
-			# run pre-install script
-			if [ -f $i/pre-install.sh ]; then
-				source $i/pre-install.sh
-			fi
-
-			# main package
-			package=$(echo $i|cut -d"/" -f4)
-			echo $package >> /root/installed-extras
-
-			echo - Installing $package
-			rpm -Uvh --replacepkgs $i/*.rpm 2>&1 
-
-			# run post-install script
-			if [ -f $i/post-install.sh ]; then
-				source $i/post-install.sh
-			fi
-		fi
-	done
-EOF
-}
-
-function add_settings2kickstart {
-	# add script to configure default settings during postinstall 
-	cat >> $PWD/iso/isolinux/ui/ks.cfg <<-'EOF'
 
 	## configure settings
 
@@ -305,8 +251,9 @@ function add_settings2kickstart {
 
 	# reboot the machine after installation
 	reboot
-EOF
+	EOF
 }
+
 
 function create_iso {
 	## create ISO file
@@ -341,8 +288,6 @@ case "$ISO_FLAVOR" in
 		prepare_iso
 		# add kickstart script to iso
 		add_kickstart_script 
-		# add default settings to kickstart
-		add_settings2kickstart
 		# create unattended install iso from workspace
 		create_iso
 		;;
@@ -353,15 +298,9 @@ case "$ISO_FLAVOR" in
 		# download and unpack base image
 		prepare_iso
 		# download updates
-			download_updates
-		# download and DISABLE firewalld
-			download_firewalld
+		download_updates
 		# add kickstart script to iso
 		add_kickstart_script 
-		# add post-install to kickstart
-			add_postinstall2kickstart 		
-		# add default settings to kickstart
-		add_settings2kickstart
 		# create unattended install iso from workspace
 		create_iso
 		;;
@@ -372,19 +311,13 @@ case "$ISO_FLAVOR" in
 		# download and unpack base image
 		prepare_iso
 		# download updates
-			download_updates
+		download_updates
 		# download dependencies like repositories etc
-			download_dependencies
+		download_dependencies
 		# download extra tools
-			download_extras
-		# download firewalld
-			download_firewalld
+		download_extras
 		# add kickstart script to iso
 		add_kickstart_script
-		# add post-install to kickstart
-			add_postinstall2kickstart 
-		# add default settings to kickstart
-		add_settings2kickstart
 		# create unattended install iso from workspace
 		create_iso		
 		;;
