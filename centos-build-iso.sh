@@ -176,8 +176,9 @@ function add_kickstart_script {
 
 	# Partition creation
 	part /boot --fstype="xfs" --ondisk=sda --size=1024
-	part / --fstype="xfs" --ondisk=sda --size=8192
-	part /tmp --fstype="xfs" --ondisk=sda --size=1024
+	part /boot/efi --fstype="efi" --size=500 --fsoptions="umask=0077,shortname=winnt"
+	part / --fstype="xfs" --ondisk=sda --size=131072
+	part /tmp --fstype="xfs" --ondisk=sda --size=8192
 	part /srv/storage/sata/0 --fstype="xfs" --ondisk=sda --size=1024 --grow
 
 	%packages --nobase
