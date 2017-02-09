@@ -205,16 +205,12 @@ function add_kickstart_script {
 
 	mkdir /root/.ssh
 	chmod 700 /root/.ssh
-	cat << STOP > /root/.ssh/authorized_keys
-	ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCw0Omn2jWn/LznyVSgOlh1bCvL9X7vSu3IMWkQEUsTkKzg7cTd1dr5tr89BXVlvIBu6g1Ai9Q9B+2d/77pXrw116PhOLJzoazn2YNPukFDCX0Um25481jS5/4fE/0BytthEWTt2oZVMI7NQuM08NC0FHMZHufMQYxyZ4UzAcy6N2/B1jT3QkTmbZoraVlTHTReCA+wvA5jiw90kiqrRdaue78cZo5gEFlQ0B4mpRIs1E02SBxHs4vD+t+xQWMxXPToarg5Lzpg1/KWqI/OUVdP63YKJWY7Bcj2GkyyhsfA8LnQOf2n/J6litDXjk8dNnzc0KHsVaFacNbI3XwSQjYP ansible
-	STOP
+	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCw0Omn2jWn/LznyVSgOlh1bCvL9X7vSu3IMWkQEUsTkKzg7cTd1dr5tr89BXVlvIBu6g1Ai9Q9B+2d/77pXrw116PhOLJzoazn2YNPukFDCX0Um25481jS5/4fE/0BytthEWTt2oZVMI7NQuM08NC0FHMZHufMQYxyZ4UzAcy6N2/B1jT3QkTmbZoraVlTHTReCA+wvA5jiw90kiqrRdaue78cZo5gEFlQ0B4mpRIs1E02SBxHs4vD+t+xQWMxXPToarg5Lzpg1/KWqI/OUVdP63YKJWY7Bcj2GkyyhsfA8LnQOf2n/J6litDXjk8dNnzc0KHsVaFacNbI3XwSQjYP ansible" | tee -a /root/.ssh/authorized_keys
 	chmod 600 /root/.ssh/authorized_keys
 	
 	mkdir /home/ansible/.ssh
 	chmod 700 /home/ansible/.ssh
-	cat << STOP > /home/ansible/.ssh/authorized_keys
-	ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCw0Omn2jWn/LznyVSgOlh1bCvL9X7vSu3IMWkQEUsTkKzg7cTd1dr5tr89BXVlvIBu6g1Ai9Q9B+2d/77pXrw116PhOLJzoazn2YNPukFDCX0Um25481jS5/4fE/0BytthEWTt2oZVMI7NQuM08NC0FHMZHufMQYxyZ4UzAcy6N2/B1jT3QkTmbZoraVlTHTReCA+wvA5jiw90kiqrRdaue78cZo5gEFlQ0B4mpRIs1E02SBxHs4vD+t+xQWMxXPToarg5Lzpg1/KWqI/OUVdP63YKJWY7Bcj2GkyyhsfA8LnQOf2n/J6litDXjk8dNnzc0KHsVaFacNbI3XwSQjYP ansible
-	STOP
+	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCw0Omn2jWn/LznyVSgOlh1bCvL9X7vSu3IMWkQEUsTkKzg7cTd1dr5tr89BXVlvIBu6g1Ai9Q9B+2d/77pXrw116PhOLJzoazn2YNPukFDCX0Um25481jS5/4fE/0BytthEWTt2oZVMI7NQuM08NC0FHMZHufMQYxyZ4UzAcy6N2/B1jT3QkTmbZoraVlTHTReCA+wvA5jiw90kiqrRdaue78cZo5gEFlQ0B4mpRIs1E02SBxHs4vD+t+xQWMxXPToarg5Lzpg1/KWqI/OUVdP63YKJWY7Bcj2GkyyhsfA8LnQOf2n/J6litDXjk8dNnzc0KHsVaFacNbI3XwSQjYP ansible" | tee -a /home/ansible/.ssh/authorized_keys
 	chmod 600 /home/ansible/.ssh/authorized_keys
 	chown -R ansible:ansible /home/ansible/.ssh
 
