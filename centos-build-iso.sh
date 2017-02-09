@@ -12,7 +12,7 @@ ISO_URL=http://centos.mirror.transip.nl/7/isos/x86_64/CentOS-7-x86_64-Minimal-16
 ISO_NAME=$(echo $ISO_URL|rev|cut -d/ -f1|rev)
 
 # name of the target ISO file
-ISO_TITLE=CentOs7-$ISO_FLAVOR
+ISO_TITLE=CentOS7-$ISO_FLAVOR
 
 
 #-------------------------------------------------------------------------------	Helper functions
@@ -183,7 +183,7 @@ function add_kickstart_script {
 	@core
 	openssh-server
 	%end
-	reboot
+	reboot --eject
 
 	%post --log=/root/ks-post.log
 	
@@ -204,10 +204,20 @@ function add_kickstart_script {
 	mkdir /root/.ssh
 	chmod 700 /root/.ssh
 	cat << STOP > /root/.ssh/authorized_keys
+	ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCw0Omn2jWn/LznyVSgOlh1bCvL9X7vSu3IMWkQEUsTkKzg7cTd1dr5tr89BXVlvIBu6g1Ai9Q9B+2d/77pXrw116PhOLJzoazn2YNPukFDCX0Um25481jS5/4fE/0BytthEWTt2oZVMI7NQuM08NC0FHMZHufMQYxyZ4UzAcy6N2/B1jT3QkTmbZoraVlTHTReCA+wvA5jiw90kiqrRdaue78cZo5gEFlQ0B4mpRIs1E02SBxHs4vD+t+xQWMxXPToarg5Lzpg1/KWqI/OUVdP63YKJWY7Bcj2GkyyhsfA8LnQOf2n/J6litDXjk8dNnzc0KHsVaFacNbI3XwSQjYP ansible
 	STOP
 	chmod 600 /root/.ssh/authorized_keys
+	
+	mkdir /home/ansible/.ssh
+	chmod 700 /home/ansible/.ssh
+	cat << STOP > /home/ansible/.ssh/authorized_keys
+	ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCw0Omn2jWn/LznyVSgOlh1bCvL9X7vSu3IMWkQEUsTkKzg7cTd1dr5tr89BXVlvIBu6g1Ai9Q9B+2d/77pXrw116PhOLJzoazn2YNPukFDCX0Um25481jS5/4fE/0BytthEWTt2oZVMI7NQuM08NC0FHMZHufMQYxyZ4UzAcy6N2/B1jT3QkTmbZoraVlTHTReCA+wvA5jiw90kiqrRdaue78cZo5gEFlQ0B4mpRIs1E02SBxHs4vD+t+xQWMxXPToarg5Lzpg1/KWqI/OUVdP63YKJWY7Bcj2GkyyhsfA8LnQOf2n/J6litDXjk8dNnzc0KHsVaFacNbI3XwSQjYP ansible
+	STOP
+	chmod 600 /home/ansible/.ssh/authorized_keys
+	chown -R ansible:ansible /home/ansible/.ssh
 
-	#yum install -y yum-utils libselinux-python logrotate
+	echo "ansible  ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible
+
 
 	yum -y clean all
 
